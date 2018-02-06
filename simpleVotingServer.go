@@ -66,10 +66,17 @@ func loginByGitHub(res http.ResponseWriter, req *http.Request) {
 func createVoteHandler(res http.ResponseWriter, req *http.Request) {
 	var (
 		jsonStr string
+		err     error
 	)
+	reqtool.SetACAO(&res)
 	jsonStr = reqtool.GetDataString(req)
 
-	createVote.Create(jsonStr)
+	err = createVote.Create(jsonStr)
+	if err != nil {
+		fmt.Fprintf(res, "%s", err.Error())
+	} else {
+		fmt.Fprintf(res, "%d", 1)
+	}
 }
 
 func main() {

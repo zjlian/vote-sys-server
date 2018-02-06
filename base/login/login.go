@@ -76,26 +76,6 @@ func signUp(u User) {
 	}
 }
 
-// hasUser 检查是否存在该用户（需要先调用依赖的数据库包dbtool.Init()）
-func hasUser(u User) bool {
-	var loginName string
-
-	row := dbtool.DB.QueryRow(
-		"select login from voteSys.Ass where uid=?",
-		u.ID,
-	)
-	err := row.Scan(&loginName)
-	//log.Println(loginName)
-	if err != nil {
-		return false
-	}
-
-	if loginName != u.Login {
-		return false
-	}
-	return true
-}
-
 // Handler 处理OAuth2.0登录，参数为登录 code
 func Handler(code string) (string, error) {
 	var (
@@ -127,7 +107,7 @@ func Handler(code string) (string, error) {
 	//log.Println("进行数据库查询，是否已有该用户信息")
 	// 查询数据库中是否存在该用户的信息，没有就添加一条
 
-	if !hasUser(user) {
+	if !HasUser(user.ID) {
 		//log.Println("不存在的用户，登记注册")
 		signUp(user)
 	}

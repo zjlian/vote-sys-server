@@ -14,35 +14,54 @@ func jsonToVote(jsonStr string, V *Vote) error {
 	return err
 }
 
-func addIntoTabVote(V *Vote) error {
+func addOptionToTab(O *Option, vcode string) error {
+	var (
+		sqlstr string
+		err    error
+	)
+	if !isLegalOption(O) {
+		return errors.New("投票选项为空")
+	}
+
+	sqlstr = "voteSys.Option (vcode, content) values (?,?)"
+	_, err = dbtool.DB.Insert(sqlstr, vcode, O.Content)
+	return err
+}
+
+func addVoteToTab(V *Vote) error {
 	var (
 		sqlstr   string
 		randCode string
 		err      error
 	)
-	if !isLegalVote(V) {
-		return errors.New("投票数据不合法")
+	if yes, err := isLegalVote(V); !yes {
+		return err
 	}
 
 	randCode = rand.GetRS16()
-	sqlstr = "voteSys.Vote (vcode, title, `describe`, selectType, createTime, deadline, location) values (?,?,?,?,?,?,?)"
+	sqlstr = "voteSys.Vote (uid, vcode, title, `describe`, selectType, createTime, deadline, location) values (?,?,?,?,?,?,?,?)"
 	_, err = dbtool.DB.Insert(sqlstr,
-		randCode, V.Title, V.Describe, V.SelectType, V.CreateTime, V.Deadline, V.Location)
+		V.UID, randCode, V.Title, V.Describe, V.SelectType, V.CreateTime, V.Deadline, V.Location)
 
+	if err != nil {
+		return err
+	}
+
+	for _, v := range V.Options {
+		addOptionToTab(&v, randCode)
+	}
 	return err
 }
 
-func create(V *Vote) {
+func create(V *Vote) error {
 	dbtool.Init()
+	err := addVoteToTab(V)
+	return err
 }
 
 // Create 创建投票
 func Create(data string) error {
-	var (
-		vote Vote
-		err  error
-	)
+	var vote Vote
 	jsonToVote(data, &vote)
-	err = create(&vote)
-	return err
+	return create(&vote)
 }
