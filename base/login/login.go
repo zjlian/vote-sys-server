@@ -104,6 +104,7 @@ func Handler(code string) (string, error) {
 	outputJSON, err = json.Marshal(user)
 	//log.Println("获取到用户信息: " + string(outputJSON))
 	dbtool.Init()
+	defer dbtool.Close()
 	//log.Println("进行数据库查询，是否已有该用户信息")
 	// 查询数据库中是否存在该用户的信息，没有就添加一条
 

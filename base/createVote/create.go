@@ -55,6 +55,8 @@ func addVoteToTab(V *Vote) error {
 
 func create(V *Vote) error {
 	dbtool.Init()
+	defer dbtool.Close()
+
 	err := addVoteToTab(V)
 	return err
 }

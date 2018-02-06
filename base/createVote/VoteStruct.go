@@ -9,7 +9,7 @@ type Option struct {
 
 // Vote 投票结构
 type Vote struct {
-	ID         int      `json:"id"`
+	//ID         int      `json:"id"`
 	UID        uint64   `json:"uid"`
 	Vcode      string   `json:"vcode"`
 	Title      string   `json:"title"`

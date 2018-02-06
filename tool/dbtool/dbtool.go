@@ -17,3 +17,8 @@ func Init() {
 		log.Println(err)
 	}
 }
+
+// Close 关闭数据库链接
+func Close() {
+	DB.Close()
+}
