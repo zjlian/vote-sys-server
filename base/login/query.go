@@ -23,5 +23,7 @@ func hasUserByUID(uid uint64) bool {
 
 // HasUser 检查是否存在该用户（需要先调用依赖的数据库包dbtool.Init()）
 func HasUser(uid uint64) bool {
+	dbtool.Init()
+	defer dbtool.Close()
 	return hasUserByUID(uid)
 }

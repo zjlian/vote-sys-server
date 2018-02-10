@@ -43,7 +43,7 @@ const createVoteData = {
 const queryUserAllVoteBaseInfo = {
     action: 'QUERY_USER_ALL_VOTE_BASE_INFO',
     data: {
-        //用户登录时获取到的 id 
+        //用户登录时获取到的 id
         uid: number
     }
 }

@@ -1,6 +1,7 @@
 package voteQuery
 
 import (
+	"encoding/json"
 	"voting-system-api/tool/dbtool"
 )
 
@@ -81,4 +82,14 @@ func AllBaseInfoByUID(uid uint64) ([]VoteBaseInfo, error) {
 	}
 
 	return result, err
+}
+
+// AllVoteBaseInfoToJSON 根据 login.User 获取该用户的所有投票基本信息的json格式数据
+func AllVoteBaseInfoToJSON(uid uint64) ([]byte, error) {
+	voteinfolist, err := AllBaseInfoByUID(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(&voteinfolist)
 }
