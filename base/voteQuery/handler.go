@@ -27,20 +27,13 @@ func Do(jsonstr string) (string, error) {
 
 	switch req.Action {
 	case "QUERY_USER_ALL_VOTE_BASE_INFO":
-		if req.Data["uid"] == nil {
-			err = errors.New("请求所需参数不存在")
-			break
-		}
+		result, err = AllVoteBaseInfoToJSON(req.Data)
 
-		uid, ok := req.Data["uid"].(float64)
-		if !ok {
-			err = errors.New("请求所需参数无效")
-			break
-		}
+	case "QUERY_VOTE_INFO":
+		result, err = VoteInfoToJSON(req.Data)
 
-		result, err = AllVoteBaseInfoToJSON(uint64(uid))
 	default:
-		err = errors.New("非法请求")
+		err = errors.New("无效请求")
 	}
 	return string(result), err
 }
