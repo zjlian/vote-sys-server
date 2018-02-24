@@ -24,7 +24,7 @@ type Vote struct {
 // 投票创建
 // GET/POST 请求url localhost/create
 const createVoteData = {
-    //用户登录时获取到的 id 
+    //用户登录时获取到的 id
     uid:        number,
     title:      string,
     describe:   string,
@@ -45,5 +45,22 @@ const queryUserAllVoteBaseInfo = {
     data: {
         //用户登录时获取到的 id
         uid: number
+    }
+}
+
+// 查询某个投票的详细信息
+const queryVoteInfo = {
+    action: 'QUERY_VOTE_INFO',
+    data: {
+        vcode: string
+    }
+}
+
+// 查询某个用户在一个投票中所投的选项
+const queryUserVotingRecord = {
+    action: 'QUERY_USER_VOTING_RECORD',
+    data: {
+        uid: number,
+        vcode: string
     }
 }
