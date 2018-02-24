@@ -13,7 +13,7 @@ type Vote struct {
 	UID        uint64   `json:"uid"`
 	Vcode      string   `json:"vcode"`
 	Title      string   `json:"title"`
-	Describe   string   `json:"descrobe"`
+	Describe   string   `json:"describe"`
 	SelectType uint8    `json:"selectType"`
 	CreateTime uint64   `json:"createTime"`
 	Deadline   uint64   `json:"deadline"`
