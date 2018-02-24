@@ -2,6 +2,7 @@ package voteQuery
 
 import (
 	"encoding/json"
+	"errors"
 	"voting-system-api/tool/dbtool"
 )
 
@@ -26,7 +27,7 @@ func allVcodeByUID(uid uint64) ([]string, error) {
 	rows, err := dbtool.DB.Query(sqlstr, uid)
 	defer rows.Close()
 
-	for i := 0; rows.Next(); i++ {
+	for rows.Next() {
 		err = rows.Scan(&tmp)
 		if err != nil {
 			break
@@ -85,8 +86,17 @@ func AllBaseInfoByUID(uid uint64) ([]VoteBaseInfo, error) {
 }
 
 // AllVoteBaseInfoToJSON 根据 login.User 获取该用户的所有投票基本信息的json格式数据
-func AllVoteBaseInfoToJSON(uid uint64) ([]byte, error) {
-	voteinfolist, err := AllBaseInfoByUID(uid)
+func AllVoteBaseInfoToJSON(data map[string]interface{}) ([]byte, error) {
+	if data["uid"] == nil {
+		return nil, errors.New("请求所需参数不存在")
+	}
+
+	uid, ok := data["uid"].(float64)
+	if !ok {
+		return nil, errors.New("请求所需参数无效")
+	}
+
+	voteinfolist, err := AllBaseInfoByUID(uint64(uid))
 	if err != nil {
 		return nil, err
 	}
