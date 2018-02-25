@@ -60,7 +60,7 @@ func loginByGitHub(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(res, "%s", `
 		<script>
 			window.location.href='https://github.com/login/oauth/authorize?client_id=1727a687d3c6f886b356'
-		</script>	
+		</script>
 	`)
 }
 
@@ -102,6 +102,8 @@ func main() {
 	flag.Parse()
 	var portStr = ":" + (*portCode)
 
+	voteQuery.Init()
+
 	http.HandleFunc("/", defHandler)
 	http.HandleFunc("/loginbygithub", loginByGitHub)
 	http.HandleFunc("/login", loginHandler)
@@ -109,4 +111,5 @@ func main() {
 	http.HandleFunc("/query", queryHandler)
 
 	http.ListenAndServe(portStr, nil)
+
 }

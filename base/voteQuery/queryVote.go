@@ -79,7 +79,7 @@ func GetVoteInfo(vcode string) (createVote.Vote, error) {
 }
 
 // VoteInfoToJSON 传入参数为含和vcode属性的map对象，将查询结果放入Vote对象中 并转为json字符串返回
-func VoteInfoToJSON(data map[string]interface{}) ([]byte, error) {
+func VoteInfoToJSON(args interface{}) (interface{}, error) {
 	var (
 		err    error
 		vcode  string
@@ -87,7 +87,12 @@ func VoteInfoToJSON(data map[string]interface{}) ([]byte, error) {
 		result []byte
 	)
 
-	_, ok := data["vcode"]
+	data, ok := args.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("queryInfo.go VoteInfoToJSON 请求参数的类型不是 map[string]interface{}")
+	}
+
+	_, ok = data["vcode"]
 	if !ok {
 		return nil, errors.New("查询请求缺失参数 vcode")
 	}

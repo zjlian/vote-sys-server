@@ -86,14 +86,18 @@ func AllBaseInfoByUID(uid uint64) ([]VoteBaseInfo, error) {
 }
 
 // AllVoteBaseInfoToJSON 根据 login.User 获取该用户的所有投票基本信息的json格式数据
-func AllVoteBaseInfoToJSON(data map[string]interface{}) ([]byte, error) {
+func AllVoteBaseInfoToJSON(args interface{}) (interface{}, error) {
+	data, ok := args.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("queryBaseInfo.go AllVoteBaseInfoToJSON 请求参数的类型不是 map[string]interface{}")
+	}
 	if data["uid"] == nil {
-		return nil, errors.New("请求所需参数不存在")
+		return nil, errors.New("queryBaseInfo.go AllVoteBaseInfoToJSON 请求所需参数不存在")
 	}
 
 	uid, ok := data["uid"].(float64)
 	if !ok {
-		return nil, errors.New("请求所需参数无效")
+		return nil, errors.New("queryBaseInfo.go AllVoteBaseInfoToJSON  请求所需参数无效")
 	}
 
 	voteinfolist, err := AllBaseInfoByUID(uint64(uid))
